@@ -1,5 +1,6 @@
 package com.warehouse.loginservice.service.impl;
 
+import com.warehouse.loginservice.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,9 +14,9 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-public class JWTServiceImpl {
+public class JWTServiceImpl implements JWTService {
 
-    private String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
@@ -49,4 +50,5 @@ public class JWTServiceImpl {
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
+
 }

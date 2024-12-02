@@ -2,6 +2,7 @@ package com.warehouse.loginservice.controller;
 
 import com.warehouse.loginservice.dto.JwtAuthenticationResponse;
 import com.warehouse.loginservice.dto.LoginRequest;
+import com.warehouse.loginservice.dto.RefreshTokenRequest;
 import com.warehouse.loginservice.dto.SignUpRequest;
 import com.warehouse.loginservice.entity.User;
 import com.warehouse.loginservice.service.AuthenticationService;
@@ -33,4 +34,10 @@ public class AuthenticationController {
     public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.login(loginRequest));
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
+    }
+
 }

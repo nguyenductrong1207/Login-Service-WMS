@@ -1,6 +1,6 @@
 package com.warehouse.loginservice;
 
-import com.warehouse.loginservice.entity.Role;
+import com.warehouse.loginservice.entity.UserRole;
 import com.warehouse.loginservice.entity.User;
 import com.warehouse.loginservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,14 @@ public class LoginserviceApplication implements CommandLineRunner {
     }
 
     public void run(String... args) {
-        User adminAccount = userRepository.findByRole(Role.ADMIN);
+        User adminAccount = userRepository.findByRole(UserRole.ADMIN);
 
         if (adminAccount == null) {
             User user = new User();
 
             user.setEmail("admin@gmail.com");
-            user.setFirstname("Trong");
-            user.setLastname("Nguyen");
-            user.setRole(Role.ADMIN);
+            user.setName("Nguyen Duc Trong");
+            user.setRole(UserRole.ADMIN);
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
             userRepository.save(user);
         }

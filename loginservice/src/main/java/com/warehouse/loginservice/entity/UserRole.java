@@ -1,8 +1,10 @@
 package com.warehouse.loginservice.entity;
 
-public enum Role {
+public enum UserRole {
 
     ADMIN,
+
     MANAGER,
     STAFF
+
 }

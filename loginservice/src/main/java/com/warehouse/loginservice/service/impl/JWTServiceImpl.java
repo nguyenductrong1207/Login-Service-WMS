@@ -16,10 +16,13 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Long expirationTime) {
+        long defaultExpirationTime = 1000 * 60 * 30; // Default: 30 minutes
+        long finalExpirationTime = (expirationTime != null) ? expirationTime : defaultExpirationTime;
+
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + finalExpirationTime))
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

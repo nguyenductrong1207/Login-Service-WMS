@@ -8,7 +8,7 @@ public interface JWTService {
 
     String extractUserName(String token);
 
-    String generateToken(UserDetails userDetails);
+    String generateToken(UserDetails userDetails, Long expirationTime);
 
     boolean isTokenValid(String token, UserDetails userDetails);
 

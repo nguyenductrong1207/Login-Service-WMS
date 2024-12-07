@@ -15,4 +15,6 @@ public class JwtAuthenticationResponse {
 
     private String refreshToken;
 
+    private String userRole;
+
 }

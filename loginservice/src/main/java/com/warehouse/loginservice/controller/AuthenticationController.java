@@ -37,11 +37,12 @@ public class AuthenticationController {
         RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(refreshTokenRequest.getRefreshToken());
         User user = refreshToken.getUser();
 
-        String accessToken = jwtService.generateToken(user);
+        String accessToken = jwtService.generateToken(user, null); // Default expiration (30 minutes)
 
         return ResponseEntity.ok(JwtAuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.getRefreshToken())
+                .userRole(user.getRole().name())
                 .build());
     }
 

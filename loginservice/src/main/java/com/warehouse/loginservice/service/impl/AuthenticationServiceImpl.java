@@ -32,12 +32,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-        var accessToken = jwtService.generateToken(user);
+
+        // Set token expiration time based on "Remember Me"
+        Long expirationTime = loginRequest.isRememberMe()
+                ? 1000L * 60 * 60 * 24 // 1 day
+                : null; // Default expiration (30 minutes)
+
+        var accessToken = jwtService.generateToken(user, expirationTime);
         var refreshToken = refreshTokenService.generateRefreshToken(loginRequest.getEmail());
 
         return JwtAuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.getRefreshToken())
+                .userRole(user.getRole().name())
                 .build();
     }
 

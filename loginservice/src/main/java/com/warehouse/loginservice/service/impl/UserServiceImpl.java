@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        String accessToken = jwtService.generateToken(savedUser);
+        String accessToken = jwtService.generateToken(savedUser, null); // Default expiration (30 minutes)
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(savedUser.getEmail());
 
         JwtAuthenticationResponse.builder()

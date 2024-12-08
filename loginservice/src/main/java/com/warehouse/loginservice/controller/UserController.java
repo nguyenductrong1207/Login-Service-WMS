@@ -17,35 +17,35 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/addNewUser")
+    @PostMapping("/user")
     public ResponseEntity<UserDto> addUserHandler(@RequestPart String userDto) throws IOException {
         UserDto dto = convertToUserDto(userDto);
         return new ResponseEntity<>(userService.addUser(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<UserDto> getUserHandler(@PathVariable Integer userId) {
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/user/all")
     public ResponseEntity<List<UserDto>> getAllUsersHandler() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/user/update/{userId}")
     public ResponseEntity<UserDto> updateUserHandler(@PathVariable Integer userId,
                                                      @RequestPart String userDtoObj) throws IOException {
         UserDto userDto = convertToUserDto(userDtoObj);
         return ResponseEntity.ok(userService.updateUser(userId, userDto));
     }
 
-    @GetMapping("/allUsersPage")
+    @GetMapping("/user/allUsersPage")
     public ResponseEntity<UserPageResponse> getUsersWithPagination(
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsersWithPagination(pageNumber, pageSize));
     }
 
-    @GetMapping("/allUsersPageSort")
+    @GetMapping("/users") // "/allUsersPageSort"
     public ResponseEntity<UserPageResponse> getUsersWithPaginationAndSorting(
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,

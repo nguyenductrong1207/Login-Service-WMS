@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PutMapping("/user/update/{userId}")
+    @PutMapping("/user/{userId}")
     public ResponseEntity<UserDto> updateUserHandler(@PathVariable Integer userId,
                                                      @RequestPart String userDtoObj) throws IOException {
         UserDto userDto = convertToUserDto(userDtoObj);

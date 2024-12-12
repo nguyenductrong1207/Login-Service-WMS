@@ -25,10 +25,11 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-                        .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name()) // UserController
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/forgotPassword/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name()) // Only Admin can access UserController
+                        .anyRequest().authenticated()) // All other requests require authentication
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider).addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class

@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/forgotPassword")
+@RequestMapping("/api/v1/forgotPassword")
 public class ForgotPasswordController {
 
     private final UserRepository userRepository;
@@ -36,6 +37,14 @@ public class ForgotPasswordController {
     public ResponseEntity<String> verifyEmail(@PathVariable String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Please provide a valid email!" + email));
+
+        user.setForgotPassword(null);
+        userRepository.save(user);
+
+        List<ForgotPassword> expiredOtps = forgotPasswordRepository.findByUserAndExpirationTimeBefore(user, new Date());
+        if (!expiredOtps.isEmpty()) {
+            forgotPasswordRepository.deleteAll(expiredOtps);
+        }
 
         int otp = otpGenerator();
 

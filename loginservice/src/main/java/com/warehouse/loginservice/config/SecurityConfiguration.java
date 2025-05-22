@@ -4,6 +4,7 @@ import com.warehouse.loginservice.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +29,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/forgotPassword/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name()) // Only Admin can access UserController
+
+                        // Allow GET and PUT for user by id for authenticated users
+                        .requestMatchers(HttpMethod.GET, "/api/v1/user/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/user/**").authenticated()
+
+                        // All other /api/v1/** requires ADMIN
+                        .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name())
                         .anyRequest().authenticated()) // All other requests require authentication
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider).addFilterBefore(

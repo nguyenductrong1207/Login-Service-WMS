@@ -17,4 +17,6 @@ public class JwtAuthenticationResponse {
 
     private String userRole;
 
+    private Integer userId;
+
 }

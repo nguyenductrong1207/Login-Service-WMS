@@ -12,4 +12,7 @@ FROM eclipse-temurin:21-jre AS runtime
 WORKDIR /app
 COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
 
+# Use the test profile by default (in-memory H2)
+ENV SPRING_PROFILES_ACTIVE=test
+
 ENTRYPOINT ["java","-jar","app.jar"]

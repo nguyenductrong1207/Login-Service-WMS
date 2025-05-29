@@ -11,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class LoginserviceApplication implements CommandLineRunner {
-
-
     @Autowired
     private UserRepository userRepository;
 
@@ -28,6 +26,7 @@ public class LoginserviceApplication implements CommandLineRunner {
 
             user.setEmail("admin@gmail.com");
             user.setName("Nguyen Duc Trong");
+            user.setUsername("ductrong");
             user.setRole(UserRole.ADMIN);
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
             userRepository.save(user);

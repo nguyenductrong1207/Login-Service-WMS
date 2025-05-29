@@ -8,8 +8,8 @@ RUN mvn package
 #RUN mvn package -DskipTests
 
 # Stage 2: slim runtime image
-FROM eclipse-temurin:21-jre AS runtime
-WORKDIR /app
-COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT ["java","-jar","app.jar"]
+#FROM eclipse-temurin:21-jre AS runtime
+#WORKDIR /app
+#COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
+#
+#ENTRYPOINT ["java","-jar","app.jar"]

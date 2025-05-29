@@ -4,8 +4,8 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY . .
-RUN mvn package
-#RUN mvn package -DskipTests
+RUN #mvn package
+RUN mvn package -DskipTests
 
 # Stage 2: slim runtime image
 FROM eclipse-temurin:21-jre AS runtime

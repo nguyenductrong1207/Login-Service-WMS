@@ -27,6 +27,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        // Public endpoints
                         .requestMatchers("/api/v1/forgotPassword/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
@@ -36,10 +37,13 @@ public class SecurityConfiguration {
 
                         // All other /api/v1/** requires ADMIN
                         .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name())
-                        .anyRequest().authenticated()) // All other requests require authentication
+
+                        // All other requests require authentication
+                        .anyRequest().authenticated())
+
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider).addFilterBefore(
-                        jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class
                 );
         return http.build();
     }

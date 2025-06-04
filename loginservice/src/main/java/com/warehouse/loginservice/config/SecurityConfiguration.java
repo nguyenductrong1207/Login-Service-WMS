@@ -32,8 +32,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
                         // Allow GET and PUT for user by id for authenticated users
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/user/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/userManagement/user/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/userManagement/user/**").authenticated()
 
                         // All other /api/v1/** requires ADMIN
                         .requestMatchers("/api/v1/**").hasAnyAuthority(UserRole.ADMIN.name())

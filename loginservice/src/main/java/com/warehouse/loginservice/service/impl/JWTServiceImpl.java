@@ -1,19 +1,34 @@
 package com.warehouse.loginservice.service.impl;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.SignedJWT;
+import com.warehouse.loginservice.exceptions.AppException;
+import com.warehouse.loginservice.exceptions.ErrorCode;
 import com.warehouse.loginservice.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.function.Function;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JWTServiceImpl implements JWTService {
 
     public String generateToken(UserDetails userDetails, Long expirationTime) {
@@ -36,7 +51,7 @@ public class JWTServiceImpl implements JWTService {
         return claimsResolvers.apply(claims);
     }
 
-    private Key getSigninKey() {
+    public Key getSigninKey() {
         byte[] key = Decoders.BASE64.decode("BF7FD11ACE545745B7BA1AF98B6F156D127BC7BB544BAB6A4FD74E4FC7");
         return Keys.hmacShaKeyFor(key);
     }
@@ -52,6 +67,34 @@ public class JWTServiceImpl implements JWTService {
 
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
+    }
+
+    public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(getSigninKey().getEncoded());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = (isRefresh)
+                ? new Date(signedJWT
+                .getJWTClaimsSet()
+                .getIssueTime()
+                .toInstant()
+                .plus(1000 * 60 * 30, ChronoUnit.SECONDS)
+                .toEpochMilli())
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified = signedJWT.verify(verifier);
+
+        log.info("Token verification result: {}", verified);
+        log.info("Token expiry time: {}", expiryTime);
+
+        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        // Because of the id is integer, we can check if the refresh token exists
+//        if (refreshTokenRepository.existsById(Integer.valueOf(signedJWT.getJWTClaimsSet().getJWTID())))
+//            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        return signedJWT;
     }
 
 }

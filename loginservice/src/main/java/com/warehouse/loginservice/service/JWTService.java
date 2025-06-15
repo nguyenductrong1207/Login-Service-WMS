@@ -1,7 +1,11 @@
 package com.warehouse.loginservice.service;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 
 @Service
 public interface JWTService {
@@ -12,4 +16,5 @@ public interface JWTService {
 
     boolean isTokenValid(String token, UserDetails userDetails);
 
+    SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException;
 }

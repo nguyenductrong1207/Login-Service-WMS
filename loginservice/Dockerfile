@@ -24,4 +24,4 @@ COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
 #ENV SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
 #ENV SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
 
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","app.jar","--server.port=${PORT}"]

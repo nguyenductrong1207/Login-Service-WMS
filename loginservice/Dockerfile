@@ -4,7 +4,6 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY . .
-RUN #mvn package
 RUN mvn package -DskipTests
 
 # Stage 2: slim runtime image
@@ -24,9 +23,9 @@ COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
 #ENV SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
 #ENV SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
 
-# Don’t bake in any SPRING_DATASOURCE_* here—Render will inject them.
-# Only set the active profile to “prod” (or leave blank to use default).
+# Set the active profile to "prod" for Render
 ENV SPRING_PROFILES_ACTIVE=prod
 
-#ENTRYPOINT ["java","-jar","app.jar"]
-ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"
+#EXPOSE 8080
+ENTRYPOINT ["java","-jar","app.jar"]
+#ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"

@@ -24,5 +24,5 @@ ENV SPRING_DATASOURCE_PASSWORD=""
 ENV SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
 ENV SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
 
-#ENTRYPOINT ["java","-jar","app.jar"]
-ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"
+ENTRYPOINT ["java","-jar","app.jar"]
+#ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"

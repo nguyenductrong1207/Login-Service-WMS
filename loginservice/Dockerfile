@@ -28,5 +28,5 @@ COPY --from=build /app/target/loginservice-0.0.1-SNAPSHOT.jar app.jar
 # Only set the active profile to “prod” (or leave blank to use default).
 ENV SPRING_PROFILES_ACTIVE=prod
 
-ENTRYPOINT ["java","-jar","app.jar"]
-#ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"
+#ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT sh -c "java -jar app.jar --server.port=${PORT}"

@@ -47,20 +47,20 @@ public class UserController {
 
     @GetMapping("/user/allUsersPage")
     public ResponseEntity<UserPageResponse> getUsersWithPagination(
-            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
+            @RequestParam(defaultValue = AppConstants.PAGE, required = false) Integer page,
+            @RequestParam(defaultValue = AppConstants.SIZE, required = false) Integer size
     ) {
-        return ResponseEntity.ok(userService.getAllUsersWithPagination(pageNumber, pageSize));
+        return ResponseEntity.ok(userService.getAllUsersWithPagination(page, size));
     }
 
     @GetMapping("/users") // "/allUsersPageSort"
     public ResponseEntity<UserPageResponse> getUsersWithPaginationAndSorting(
-            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.PAGE, required = false) Integer page,
+            @RequestParam(defaultValue = AppConstants.SIZE, required = false) Integer size,
             @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String dir
     ) {
-        return ResponseEntity.ok(userService.getAllUsersWithPaginationAndSorting(pageNumber, pageSize, sortBy, dir));
+        return ResponseEntity.ok(userService.getAllUsersWithPaginationAndSorting(page, size, sortBy, dir));
     }
 
     private UserDto convertToUserDto(String userDtoObj) throws JsonProcessingException {

@@ -119,8 +119,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserPageResponse getAllUsersWithPagination(Integer pageNumber, Integer pageSize) {
-        Pageable pageAble = PageRequest.of(pageNumber, pageSize);
+    public UserPageResponse getAllUsersWithPagination(Integer page, Integer size) {
+        Sort defaultSort = Sort.by("userId").ascending();
+        Pageable pageAble = PageRequest.of(page - 1, size, defaultSort);
 
         Page<User> userPages = userRepository.findAll(pageAble);
 
@@ -136,18 +137,18 @@ public class UserServiceImpl implements UserService {
 
         return new UserPageResponse(
                 userDtos,
-                pageNumber,
-                pageSize,
+                page,
+                size,
                 userPages.getTotalElements(),
-                userPages.getTotalPages(),
-                userPages.isLast()
+                userPages.getTotalPages()
         );
     }
 
+
     @Override
-    public UserPageResponse getAllUsersWithPaginationAndSorting(Integer pageNumber, Integer pageSize, String sortBy, String dir) {
+    public UserPageResponse getAllUsersWithPaginationAndSorting(Integer page, Integer size, String sortBy, String dir) {
         Sort sort = dir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
         Page<User> userPages = userRepository.findAll(pageable);
 
         List<UserDto> userDtos = userPages.getContent().stream()
@@ -162,11 +163,10 @@ public class UserServiceImpl implements UserService {
 
         return new UserPageResponse(
                 userDtos,
-                pageNumber,
-                pageSize,
+                page,
+                userPages.getSize(),
                 userPages.getTotalElements(),
-                userPages.getTotalPages(),
-                userPages.isLast()
+                userPages.getTotalPages()
         );
     }
 

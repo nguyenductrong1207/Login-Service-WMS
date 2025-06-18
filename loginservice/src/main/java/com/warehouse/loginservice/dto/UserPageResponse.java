@@ -3,9 +3,8 @@ package com.warehouse.loginservice.dto;
 import java.util.List;
 
 public record UserPageResponse(List<UserDto> userDtos,
-                               Integer pageNumber,
-                               Integer pageSize,
+                               Integer page,
+                               Integer size,
                                long totalElements,
-                               int totalPages,
-                               boolean isLast) {
+                               int totalPages) {
 }

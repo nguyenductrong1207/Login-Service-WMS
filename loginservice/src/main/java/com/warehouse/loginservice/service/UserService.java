@@ -18,8 +18,8 @@ public interface UserService {
 
     UserDto updateUser(Integer userId, UserDto userDto) throws IOException;
 
-    UserPageResponse getAllUsersWithPagination(Integer pageNumber, Integer pageSize);
+    UserPageResponse getAllUsersWithPagination(Integer page, Integer size);
 
-    UserPageResponse getAllUsersWithPaginationAndSorting(Integer pageNumber, Integer pageSize, String sortBy, String dir);
+    UserPageResponse getAllUsersWithPaginationAndSorting(Integer page, Integer size, String sortBy, String dir);
 
 }

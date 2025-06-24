@@ -15,6 +15,7 @@ public class WebConfig {
 
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");  // Frontend URL
+        config.addAllowedOrigin("https://warehouse-management-system-q7sp.onrender.com"); // Frontend Deploy
         config.addAllowedHeader("*");  // Allow all headers
         config.addAllowedMethod("*");  // Allow all HTTP methods (GET, POST, etc.)
 
